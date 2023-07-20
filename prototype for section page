@@ -1,0 +1,91 @@
+<!-- This is code for section page with function to edit content -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page 1</title>
+    <style>
+        #content {
+            margin: 20px;
+        }
+        .edit-btn, .save-btn, #home-btn {
+            margin: 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Page title that can be edited -->
+        <h1 id="page-title">Welcome to Page 1</h1> 
+        <button id="edit-btn-title">Edit</button>
+        <button id="save-btn-title" style="display: none;">Save</button>
+        <a href="index.html">Go Home</a>
+    </header>
+
+    <section id="content">
+        <!-- Section title that can be edited -->
+        <h2 id="section-title">Section Title</h2>
+        <button id="edit-btn-section">Edit</button>
+        <button id="save-btn-section" style="display: none;">Save</button>
+        <!-- Section content that can be edited -->
+        <p id="editable-content">This is the content that can be edited. You can replace this text with your own content.</p>
+        <button id="edit-btn-content">Edit</button>
+        <button id="save-btn-content" style="display: none;">Save</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 Our Website</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        // Define a function to set up the edit/save functionality for a given element
+        function edit(element, editBtn, saveBtn) {
+            // When the edit button is clicked
+            $(editBtn).click(function(){
+                // Grab the current text of the element
+                let content = $(element).text();
+                // Replace the element with a textarea containing the current text
+                $(element).replaceWith('<textarea id="'+element.slice(1)+'">'+content+'</textarea>');
+                // Hide the edit button and show the save button
+                $(this).hide();
+                $(saveBtn).show();
+            });
+
+            // When the save button is clicked
+            $(saveBtn).click(function(){
+                // Grab the current text of the textarea
+                let content = $(element).val();
+                // Replace the textarea with a p element containing the new text
+                $(element).replaceWith('<p id="'+element.slice(1)+'">'+content+'</p>');
+                // Store the new text in localStorage
+                localStorage.setItem(element, content);
+                // Hide the save button and show the edit button
+                $(this).hide();
+                $(editBtn).show();
+            });
+        }
+
+        // When the document is ready
+        $(document).ready(function(){
+            // If there's saved content in localStorage, set the text of the element to this content
+            if(localStorage.getItem('#page-title')) {
+                $('#page-title').text(localStorage.getItem('#page-title'));
+            }
+            // Set up the edit/save functionality for the page title
+            edit('#page-title', '#edit-btn-title', '#save-btn-title');
+            
+            // Repeat for the section title and the editable content
+            if(localStorage.getItem('#section-title')) {
+                $('#section-title').text(localStorage.getItem('#section-title'));
+            }
+            edit('#section-title', '#edit-btn-section', '#save-btn-section');
+
+            if(localStorage.getItem('#editable-content')) {
+                $('#editable-content').text(localStorage.getItem('#editable-content'));
+            }
+            edit('#editable-content', '#edit-btn-content', '#save-btn-content');
+        });
+    </script>
+</body>
+</html>
